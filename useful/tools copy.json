@@ -1,0 +1,409 @@
+[
+    {
+        "type": "function",
+        "function": {
+            "name": "AreaIntent",
+            "description": "目的地意图。当用户询问具体单个目的地时(目的地必须属于行政规划（大洲、国家、省份、市区、区县、村、州等）)。例如：南京、丰台区、东京、江苏等，注意不是包含提到目的地情况就归为此类;",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "intent": {
+                        "type": "string",
+                        "enum": [
+                            "area",
+                            "abroadArea"
+                        ],
+                        "description": "根据目的地位置自动区分国内(area)/国外(abroadArea),不明确是否为国内时归为(area)"
+                    }
+                },
+                "required": [
+                    "intent"
+                ]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "TrafficIntent",
+            "description": "交通意图识别，覆盖火车、飞机、汽车、打车等多种交通工具的查询、预订、咨询及售前问题,火车车次号（trainnum）和航班号（flightnum）的识别",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "intent": {
+                        "type": "string",
+                        "enum": [
+                            "train",
+                            "trainnum",
+                            "flight",
+                            "flightnum",
+                            "bus",
+                            "usecar",
+                            "traffic"
+                        ],
+                        "description": "意图分类规则：\n- train: 火车相关行程,包含火车站都归为该类，火车票车次查询和预订,火车站（****站属于该意图，例如：南京站、北京北站、凤台站）础信息查询、火车售前问题、火车资源等，从**站到**站 **站到**，**到**站含有站、站台、火车站归为该类，不包括火车售后;)。若同时包含出发地目的地时候，即使包含车次号（如“南京到上海的G123”）仍归为此类,需要关注的一点，苏州北，南京南，徐州东等，都属于火车站点。\n- trainnum: 仅火车车次号查询、预订（如“G123次列车”）。\n- flight: 包含飞机场都归为该类，飞机票查询和预订、飞机场基础信息查询和售前问题，从**机场到**机场 **机场到**，**到**机场含有机场、飞机、国际机场归为该类，但是不包括飞机票售后;若同时包含出发地目的地时候，即使包含航班号（如“北京到上海的CA123”）仍归为此类。\n- flightnum: 仅航班号查询、预订（如“CA123航班”）。\n- bus: 汽车票车次查询和预订、汽车站基础信息查询，从**汽车站到**汽车站，但是不包括汽车票售后。\n- usecar: 打车、出租车、顺风车等用车场景。\n- traffic: 最重要的一点若无法区分具体交通方式时使用归为该类，只有无法区分用啥交通方式才会给到这边例如两个行政区划之间，两个目的地(行政区划（国际、省份、城市、区县、大洲、洲等）)也归为该类，两个行政区划之间，从**到**，例如：1、南京苏州；2、安徽无锡；3、日本北京；4、上海到凤台等;。"
+                    }
+                },
+                "required": [
+                    "intent"
+                ]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "HotelIntent",
+            "description": "酒店（住宿、旅馆）查询和预定、酒店售前咨询，可以查询某地的符合要求的酒店，可以查询某一个酒店的基础信息（酒店介绍、地址、电话、评分、设施、星级、是否有早餐等），也可以预定、入住酒店；不包括酒店订单售后方面的处理;",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "intent": {
+                        "type": "string",
+                        "enum": [
+                            "hotel",
+                            "abroadHotel"
+                        ],
+                        "description": "根据酒店位置自动区分国内(hotel)/国外(abroadHotel)酒店场景,不明确是否为国内时归为(hotel)"
+                    }
+                },
+                "required": [
+                    "intent"
+                ]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "SceneryIntent",
+            "description": "景区资源名、景区查询和预定、景区售前咨询，可以查询某地的符合要求的景区，可以查询某一个景区的基础信息（景区介绍、门票、地址、电话、评分、设施等），也可以预定景区；不包括景区订单售后方面的处理;注意游船、夜游等也归为景点意图;以及询问某个地方的景点，例如：日本的景点、北京的岛屿、苏州的水上乐园",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "intent": {
+                        "type": "string",
+                        "enum": [
+                            "scenery",
+                            "abroadScenery"
+                        ],
+                        "description": "根据景区位置自动区分国内(scenery)/国外(abroadScenery)景区场景,不明确是否为国内时归为(scenery)"
+                    }
+                },
+                "required": [
+                    "intent"
+                ]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "GuestHouseIntent",
+            "description": "民宿查询和预定、民宿售前咨询，可以查询某地的符合要求的民宿，可以查询某一个民宿的基础信息（民宿介绍、地址、电话、评分、设施、是否有早餐等），也可以预定民宿；不包括民宿订单售后方面的处理;",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "intent": {
+                        "type": "string",
+                        "enum": [
+                            "guestHouse"
+                        ],
+                        "description": "根据用户输入归类为民宿(guestHouse)场景"
+                    }
+                },
+                "required": [
+                    "intent"
+                ]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "ClockHotelIntent",
+            "description": "钟点房查询和预定、钟点房售前咨询，可以查询某地的符合要求的钟点房，可以查询某一个钟点房的基础信息（钟点房介绍、地址、电话、评分、设施、是否有早餐等），也可以预定钟点房；不包括钟点房订单售后方面的处理;",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "intent": {
+                        "type": "string",
+                        "enum": [
+                            "clockHotel"
+                        ],
+                        "description": "根据用户输入归类为钟点房(clockHotel)场景"
+                    }
+                },
+                "required": [
+                    "intent"
+                ]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "AddressIntent",
+            "description": "地址类的信息必须具体到具体的地址才归为该类别，例如酝慧路66号;",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "intent": {
+                        "type": "string",
+                        "enum": [
+                            "address"
+                        ],
+                        "description": "根据用户输入归类为地址(address)场景"
+                    }
+                },
+                "required": [
+                    "intent"
+                ]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "PoiIntent",
+            "description": "地点坐标类信息查询，相关坐标信息包括:学校、办公楼、街道、大桥、地铁站、体育馆、游泳馆、法院、政府、商城、购物中心、广场**路等等以及其他地理信息，但是目的地（大洲、国家、省份、城市、区县、乡村等）、景区、酒店、交通站台、地址等这些不要归为该类，不能将有专属意图的地理信息纳入该类;",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "intent": {
+                        "type": "string",
+                        "enum": [
+                            "poi"
+                        ],
+                        "description": "根据用户输入归类为poi(poi)场景"
+                    }
+                },
+                "required": [
+                    "intent"
+                ]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "ShipIntent",
+            "description": "船票意图、其中包括查询、预定、问答、咨询信息、售前等相关问题;注意游船、夜游等属于景点不要归为该类别;",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "intent": {
+                        "type": "string",
+                        "enum": [
+                            "ship"
+                        ],
+                        "description": "根据用户输入归类为船票(ship)场景"
+                    }
+                },
+                "required": [
+                    "intent"
+                ]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "YoulunIntent",
+            "description": "邮轮、游轮资源、相关票务意图，其中包括查询、预定、问答、咨询信息、售前等相关问题;",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "intent": {
+                        "type": "string",
+                        "enum": [
+                            "youlun"
+                        ],
+                        "description": "根据用户输入归类为游轮(youlun)场景"
+                    }
+                },
+                "required": [
+                    "intent"
+                ]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "TravelIntent",
+            "description": "游玩旅游相关意图，旅游中度假和攻略产品的查询、预定、咨询、售前意图;",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "intent": {
+                        "type": "string",
+                        "enum": [
+                            "holiday",
+                            "guide"
+                        ],
+                        "description": "根据产品类型分度假(holiday例如：南京自由行/北京三日游/湖南自驾游),攻略(guide攻略类，例如：南京两日游攻略/苏州旅行攻略，还有旅游相关的咨询、问答、售前等，例如：南京怎么玩，南京哪里好玩，苏州哪里有好玩的滑冰场)"
+                    }
+                },
+                "required": [
+                    "intent"
+                ]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "PlayEquipmentIntent",
+            "description": "游玩设备相关意图，游玩设备相关的查询、预定、咨询、售前意图;游玩的设备具体包含：翻译机、电话卡、sim卡，esim卡，asi卡等网络卡、境外上网卡等",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "intent": {
+                        "type": "string",
+                        "enum": [
+                            "equipment"
+                        ],
+                        "description": "根据用户输入归类为游玩设备(equipment)场景"
+                    }
+                },
+                "required": [
+                    "intent"
+                ]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "ShowIntent",
+            "description": "演出表演类资源以及相关查询、预定、咨询、售前意图;",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "intent": {
+                        "type": "string",
+                        "enum": [
+                            "show"
+                        ],
+                        "description": "根据用户输入归类为演出(show)场景"
+                    }
+                },
+                "required": [
+                    "intent"
+                ]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "FilmIntent",
+            "description": "电影类资源以及相关查询、预定、咨询、售前意图;",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "intent": {
+                        "type": "string",
+                        "enum": [
+                            "film"
+                        ],
+                        "description": "根据用户输入归类为电影(film)场景"
+                    }
+                },
+                "required": [
+                    "intent"
+                ]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "QianzhengIntent",
+            "description": "签证类以及相关查询、咨询、售前意图;",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "intent": {
+                        "type": "string",
+                        "enum": [
+                            "qianzheng"
+                        ],
+                        "description": "根据用户输入归类为签证(qianzheng)场景"
+                    }
+                },
+                "required": [
+                    "intent"
+                ]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "InsuranceIntent",
+            "description": "保险类(火车、机票、大巴、酒店等)的相关问题购买、咨询、售前意图;",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "intent": {
+                        "type": "string",
+                        "enum": [
+                            "insurance"
+                        ],
+                        "description": "根据用户输入归类为保险(insurance)场景"
+                    }
+                },
+                "required": [
+                    "intent"
+                ]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "CustomIntent",
+            "description": "售后(火车、汽车、景区、酒店等所有场景)的咨询、询问等相关意图;",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "intent": {
+                        "type": "string",
+                        "enum": [
+                            "custom"
+                        ],
+                        "description": "根据用户输入归类为售后(custom)场景"
+                    }
+                },
+                "required": [
+                    "intent"
+                ]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "OtherIntent",
+            "description": "无法进行意图分类的以及闲聊类的相关问题;",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "intent": {
+                        "type": "string",
+                        "enum": [
+                            "unknown",
+                            "chat"
+                        ],
+                        "description": "根据用户输入自动区分无法识别意图(unknown)/闲聊(chat)"
+                    }
+                },
+                "required": [
+                    "intent"
+                ]
+            }
+        }
+    }
+]

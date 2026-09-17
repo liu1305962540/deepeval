@@ -1,0 +1,59 @@
+    [
+        {
+            "type": "function",
+            "function": {
+                "name": "NerRecognition",
+                "description": "命名实体识别任务。⚠️ 重要：用户输入的每一个字符都必须有对应的标签！包括标点符号、助词、连词等所有非实体字符都必须标记为O标签。确保输入文本的字符全覆盖。",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "result": {
+                            "type": "array",
+                            "description": "识别结果列表，必须覆盖输入文本的每一个字符。连续的相同标签应该合并为一个结果项。",
+                            "items": {
+                                "type": "object",
+                                "properties": { 
+                                    "text": {
+                                        "type": "string",
+                                        "description": "识别的实体文本或非实体文本"
+                                    },
+                                    "label": {
+                                        "type": "string",
+                                        "description": "实体标签类型，非实体必须标记为O"
+                                    },
+                                    "nested": {
+                                        "type": "array",
+                                        "description": "嵌套实体列表，可选字段",
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "text": {
+                                                    "type": "string",
+                                                    "description": "嵌套实体文本"
+                                                },
+                                                "label": {
+                                                    "type": "string",
+                                                    "description": "嵌套实体标签类型"
+                                                }
+                                            },
+                                            "required": [
+                                                "text",
+                                                "label"
+                                            ]
+                                        }
+                                    }
+                                },
+                                "required": [
+                                    "text",
+                                    "label"
+                                ]
+                            }
+                        }
+                    },
+                    "required": [
+                        "result"
+                    ]
+                }
+            }
+        }
+    ]

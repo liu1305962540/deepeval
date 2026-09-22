@@ -129,20 +129,37 @@ def build_dataset() -> EvaluationDataset:
 # ---------------------------------------------------------------------------
 
 
-def build_metrics() -> List[Any]:
-    """四层指标，全部挂在 trace（整条链路）上。"""
+def build_metrics(verbose: bool = True) -> List[Any]:
+    """四层指标，全部挂在 trace（整条链路）上。
+
+    verbose=True 时，每个指标会把中间步骤打印到终端：
+    抽出的任务/计划、工具比对过程、最终分数和理由。
+    """
     return [
-        # 任务拆分层：拆出来的计划合不合理
-        PlanQualityMetric(threshold=0.5, model=EVAL_MODEL),
-        # 计划执行层：有没有按自己的计划走
-        PlanAdherenceMetric(threshold=0.5, model=EVAL_MODEL),
-        # 工具选择层：该调的工具调了没（按工具名确定性比对）
-        ToolCorrectnessMetric(threshold=0.5, model=EVAL_MODEL),
-        # 工具参数层：参数填得对不对
-        ArgumentCorrectnessMetric(threshold=0.5, model=EVAL_MODEL),
-        # 整体执行层：任务完成度 + 步骤是否冗余
-        TaskCompletionMetric(threshold=0.5, model=EVAL_MODEL),
-        StepEfficiencyMetric(threshold=0.5, model=EVAL_MODEL),
+        # 1) 任务拆分质量：从 trace 抽计划 → 裁判模型按完整/逻辑/效率打分
+        PlanQualityMetric(
+            threshold=0.5, model=EVAL_MODEL, verbose_mode=verbose
+        ),
+        # 2) 计划执行：从 trace 抽计划 → 对照实际执行是否听话
+        PlanAdherenceMetric(
+            threshold=0.5, model=EVAL_MODEL, verbose_mode=verbose
+        ),
+        # 3) 工具选择：期望工具 vs 实际工具，纯代码集合比对（数学公式）
+        ToolCorrectnessMetric(
+            threshold=0.5, model=EVAL_MODEL, verbose_mode=verbose
+        ),
+        # 4) 工具参数：裁判模型对每次调用投 yes/no，再算正确比例
+        ArgumentCorrectnessMetric(
+            threshold=0.5, model=EVAL_MODEL, verbose_mode=verbose
+        ),
+        # 5) 任务完成度：从 trace 抽 task/outcome → 裁判模型给 0~1
+        TaskCompletionMetric(
+            threshold=0.5, model=EVAL_MODEL, verbose_mode=verbose
+        ),
+        # 6) 步骤效率：看有没有多余调用，裁判模型按五档锚点打分
+        StepEfficiencyMetric(
+            threshold=0.5, model=EVAL_MODEL, verbose_mode=verbose
+        ),
     ]
 
 
